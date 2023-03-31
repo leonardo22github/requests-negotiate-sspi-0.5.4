@@ -114,7 +114,7 @@ class HttpNegotiateAuth(AuthBase):
         # this is important for some web applications that store
         # authentication-related info in cookies
         if response.headers.get('set-cookie'):
-            request.headers['Cookie'] = response.headers.get('set-cookie')
+            request.headers['Cookie'] = request.headers['Cookie'] + response.headers.get('set-cookie')
 
         # Send initial challenge auth header
         try:
@@ -164,7 +164,7 @@ class HttpNegotiateAuth(AuthBase):
 
         # Keep passing the cookies along
         if response2.headers.get('set-cookie'):
-            request.headers['Cookie'] = response2.headers.get('set-cookie')
+            request.headers['Cookie'] = request.headers['Cookie'] + response2.headers.get('set-cookie')
 
         # Extract challenge message from server
         challenge = [val[len(scheme)+1:] for val in response2.headers.get('WWW-Authenticate', '').split(', ') if scheme in val]
